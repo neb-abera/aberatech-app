@@ -22,10 +22,16 @@ final class AppUITests: XCTestCase {
         return app
     }
 
+    /// Taps a tab until it shows as selected. On iOS 27 (2026-11-22) a tap
+    /// made while a system sheet was still closing was lost.
     private func open(_ tab: String, in app: XCUIApplication) {
         let button = app.tabBars.buttons[tab]
         XCTAssertTrue(button.waitForExistence(timeout: 15), app.debugDescription)
-        button.tap()
+        for _ in 0..<3 {
+            button.tap()
+            if poll(3, { button.isSelected }) { return }
+        }
+        XCTFail("the \(tab) tab did not open:\n\(app.debugDescription)")
     }
 
     private func poll(_ timeout: TimeInterval, _ holds: () -> Bool) -> Bool {
@@ -192,6 +198,8 @@ final class AppUITests: XCTestCase {
         for _ in 0..<4 where !(allow.exists && allow.isHittable) { host.swipeUp() }
         XCTAssertTrue(allow.isHittable, host.debugDescription)
         allow.tap()
+        let sheet = host.descendants(matching: .any).matching(label).firstMatch
+        XCTAssertTrue(poll(10) { !sheet.exists }, host.debugDescription)
         return true
     }
 
