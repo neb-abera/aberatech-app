@@ -9,6 +9,13 @@ struct ClientTests {
 
     static func client(_ server: FakeAberaServer) -> AberaClient { AberaClient(session: session, transport: server) }
 
+    @Test func an_added_request_never_takes_the_id_of_one_already_there() async throws {
+        let server = FakeAberaServer(token: "abt_token", requests: [RequestItem(id: "r1", title: "Rake the leaves")])
+        let added = try await Self.client(server).addRequest(RequestInput(title: "Buy leaf bags"))
+        #expect(added.id != "r1")
+        #expect(Set(try await Self.client(server).requests().map(\.id)).count == 2)
+    }
+
     @Test func a_request_is_added_edited_and_removed() async throws {
         let server = FakeAberaServer(token: "abt_token")
         let client = Self.client(server)

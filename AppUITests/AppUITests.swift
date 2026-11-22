@@ -106,7 +106,8 @@ final class AppUITests: XCTestCase {
         faucet.tap()
         let title = app.textFields["request-title"]
         XCTAssertTrue(title.waitForExistence(timeout: 5))
-        title.tap()
+        // A tap past the end of the text puts the cursor after it.
+        title.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)).tap()
         title.typeText(" and the shower")
         app.buttons["save-request"].tap()
         XCTAssertTrue(

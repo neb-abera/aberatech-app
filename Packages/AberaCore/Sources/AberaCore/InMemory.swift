@@ -119,7 +119,7 @@ public actor FakeAberaServer: HTTPTransport {
             guard let input = decode(RequestInput.self, request) else { return respond(request, 400) }
             if let problem = input.problem { return respond(request, 400, ["errors": ["request": [problem]]]) }
             let item = RequestItem(
-                id: "r\(nextId)", title: input.title, details: input.details, due: input.due, link: input.link)
+                id: "new-\(nextId)", title: input.title, details: input.details, due: input.due, link: input.link)
             nextId += 1
             requestItems.insert(item, at: 0)
             return respond(request, 200, item)
