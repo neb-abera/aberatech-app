@@ -18,9 +18,33 @@ struct HealthKitWeights: WeightReading {
     static var available: Bool { HKHealthStore.isHealthDataAvailable() }
 
     /// Shows the Health sheet the first time, and returns at once after.
+    /// One request at a time: the launch refresh and the app turning active
+    /// both ask, and on 2026-11-22 iOS 27 showed a second sheet for the
+    /// second request after the first was allowed.
     func requestAccess() async {
         guard Self.available else { return }
-        try? await Self.store.requestAuthorization(toShare: writes ? [Self.bodyMass] : [], read: [Self.bodyMass])
+        await Self.requests.ask(toShare: writes ? [Self.bodyMass] : [], read: [Self.bodyMass])
+    }
+
+    static let requests = AccessRequests()
+
+    /// Shares a request on screen with every caller, and asks only while
+    /// iOS says a request is still needed.
+    actor AccessRequests {
+        private var pending: Task<Void, Never>?
+
+        func ask(toShare: Set<HKSampleType>, read: Set<HKObjectType>) async {
+            if let pending { return await pending.value }
+            let task = Task {
+                let store = HealthKitWeights.store
+                let status = try? await store.statusForAuthorizationRequest(toShare: toShare, read: read)
+                guard status != .unnecessary else { return }
+                try? await store.requestAuthorization(toShare: toShare, read: read)
+            }
+            pending = task
+            await task.value
+            pending = nil
+        }
     }
 
     func samples(since: Date) async throws -> [WeightSample] {
