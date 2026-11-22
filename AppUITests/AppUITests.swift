@@ -183,7 +183,8 @@ final class AppUITests: XCTestCase {
         guard poll(timeout, { inApp.exists || inSpringboard.exists }) else { return false }
         let host = inApp.exists ? app : springboard
         (inApp.exists ? inApp : inSpringboard).tap()
-        let allow = host.buttons["Allow"].firstMatch
+        // iOS 27 exposes the sheet's Allow as static text, not a button.
+        let allow = host.descendants(matching: .any).matching(NSPredicate(format: "label == 'Allow'")).firstMatch
         XCTAssertTrue(allow.waitForExistence(timeout: 5), host.debugDescription)
         allow.tap()
         return true
