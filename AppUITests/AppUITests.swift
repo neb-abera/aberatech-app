@@ -197,7 +197,10 @@ final class AppUITests: XCTestCase {
 
         open("Me", in: app)
         let send = app.buttons["send-weights"]
-        XCTAssertTrue(send.waitForExistence(timeout: 5))
+        // On the iOS 27 simulator launch took 16 s on 2026-11-22, and the
+        // launch sheet came after the 8 s wait and covered this screen.
+        if !allowed && !send.waitForExistence(timeout: 5) { allowed = allowHealth(app, timeout: 20) }
+        XCTAssertTrue(send.waitForExistence(timeout: 10), app.debugDescription)
         send.tap()
         if !allowed { allowed = allowHealth(app, timeout: 20) }
         if !allowed {
