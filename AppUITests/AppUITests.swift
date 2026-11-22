@@ -188,12 +188,19 @@ final class AppUITests: XCTestCase {
             allow.tap()
             return true
         }
-        // iOS 27 (2026-11-22) gives Allow no button element: only a static
-        // text that no tap can resolve. It sits at the right end of the
-        // "Health Access" navigation bar, with Don't Allow at the left.
-        let bar = host.navigationBars["Health Access"]
-        XCTAssertTrue(bar.waitForExistence(timeout: 5), host.debugDescription)
-        bar.coordinate(withNormalizedOffset: CGVector(dx: 0.93, dy: 0.5)).tap()
+        // On iOS 27 (2026-11-22) the CI screen recording shows no Allow in
+        // the sheet's bar, and its element sits outside the visible frame.
+        // Scroll the sheet until it can be tapped.
+        let anyAllow = host.descendants(matching: .any).matching(NSPredicate(format: "label == 'Allow'")).firstMatch
+        for _ in 0..<4 where !(allow.exists && allow.isHittable) && !(anyAllow.exists && anyAllow.isHittable) {
+            host.swipeUp()
+        }
+        if allow.exists && allow.isHittable {
+            allow.tap()
+        } else {
+            XCTAssertTrue(anyAllow.isHittable, host.debugDescription)
+            anyAllow.tap()
+        }
         return true
     }
 
