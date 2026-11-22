@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+#
+# test-app.sh: build the app for the simulator and run the UI tests, on the
+# newest iPhone simulator the selected Xcode has, then print the app
+# target's line coverage.
+#
+#   scripts/test-app.sh
+
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+# The highest-numbered "iPhone N Pro" on the newest iOS that has one, among
+# the simulators the selected Xcode can run, else the newest iPhone. The
+# list goes to the log. The earlier pick read simctl. From
+# 2026-10-26 it took an iPhone Duo on the Xcode 27 runner, and six list
+# tests failed. On 2026-10-28 the same pick failed with "The iOS 27.1
+# simulator runtime is not available". The last green run, on 2026-10-19,
+# had used the iPhone 18 Pro.
+# The whole answer is kept, so an empty list says why.
+mkdir -p build
+pick_device() {
+  xcodebuild -showdestinations -project AberaTech.xcodeproj -scheme AberaTech > build/destinations.log 2>&1 || true
+  device="$(python3 -c '
+import re, sys
+found = []
+for line in sys.stdin:
+    m = re.search(r"platform:iOS Simulator,.* id:([0-9A-F-]{36}), OS:([0-9.]+), name:(iPhone[^}]*?) \}", line)
+    if m:
+        found.append((tuple(int(p) for p in m.group(2).split(".")), m.group(3), m.group(1)))
+for f in sorted(found):
+    print(".".join(map(str, f[0])), f[1], f[2], file=sys.stderr)
+pros = [(f[0], int(m.group(1)), f[2]) for f in found if (m := re.fullmatch(r"iPhone (\d+) Pro", f[1]))]
+if pros:
+    print(max(pros)[2])
+elif found:
+    print(max(found)[2])
+' < build/destinations.log)"
+}
+
+# Some runners list no simulator SDK at first: the iOS runtime's disk image
+# is not mounted yet. On 2026-11-19 and 2026-11-20 two Xcode 26.5 jobs, on
+# images 20261102.0473.1 and 20261117.0516.1, failed here, and the first
+# image passed in other runs the same day.
+# Wait up to 5 minutes, and ask Xcode to fetch the platform halfway.
+device=""
+for attempt in $(seq 1 10); do
+  pick_device
+  [ -n "$device" ] && break
+  echo "no iPhone simulator yet (attempt $attempt of 10)" >&2
+  xcrun simctl list runtimes >&2 || true
+  if [ "$attempt" -eq 5 ]; then xcodebuild -downloadPlatform iOS >&2 || true; fi
+  sleep 30
+done
+[ -n "$device" ] || { echo "error: no iPhone simulator available. xcodebuild -showdestinations said:" >&2; tail -40 build/destinations.log >&2; exit 1; }
+xcrun simctl list devices | grep "$device"
+
+# Boot first and wait, so the first test does not pay the cold start
+# (51 s to launch the app on the xcode-27 runner) inside its two minutes.
+xcrun simctl boot "$device" 2>/dev/null || true
+xcrun simctl bootstatus "$device" -b
+
+mkdir -p build
+rm -rf build/AberaTech.xcresult build/WarmUp.xcresult
+# Signed ad hoc, which needs no team or profile on a simulator and embeds
+# the entitlements, HealthKit among them.
+signing=(CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=YES CODE_SIGNING_ALLOWED=YES DEVELOPMENT_TEAM=)
+xcodebuild build-for-testing \
+  -project AberaTech.xcodeproj \
+  -scheme AberaTech \
+  -destination "id=$device" \
+  -derivedDataPath build/DerivedData \
+  "${signing[@]}" \
+  > build/build-for-testing.log 2>&1 || { tail -80 build/build-for-testing.log >&2; exit 1; }
+
+# The first launch under XCUITest on a fresh simulator can take minutes or
+# fail (test0WarmUp in AppUITests says when). It runs alone and its result
+# does not count. The tests then run warm without it.
+set +e +o pipefail
+xcodebuild test-without-building \
+  -project AberaTech.xcodeproj \
+  -scheme AberaTech \
+  -destination "id=$device" \
+  -resultBundlePath build/WarmUp.xcresult \
+  -derivedDataPath build/DerivedData \
+  -only-testing:AberaTechUITests/AppUITests/test0WarmUp \
+  -test-timeouts-enabled YES \
+  -default-test-execution-time-allowance 300 \
+  -maximum-test-execution-time-allowance 300 \
+  "${signing[@]}" \
+  > build/warm-up.log 2>&1
+echo "warm-up: xcodebuild exited $?"
+
+# Streamed, so a hung test shows where it hung. Each test gets two minutes,
+# unless it asks for more with executionTimeAllowance, up to five.
+# A test that fails runs once more: on 2026-11-09 the Xcode 27 simulator
+# failed four runs in a row at launch, in a different test each time ("does
+# not have a process ID", "Failed to terminate", 105 s to idle, no card in
+# Notification Center), while Xcode 26.5 passed every test. A test that
+# fails twice fails the job. Each retried test is named below.
+xcodebuild test-without-building \
+  -project AberaTech.xcodeproj \
+  -scheme AberaTech \
+  -destination "id=$device" \
+  -resultBundlePath build/AberaTech.xcresult \
+  -derivedDataPath build/DerivedData \
+  -skip-testing:AberaTechUITests/AppUITests/test0WarmUp \
+  -retry-tests-on-failure -test-iterations 2 \
+  -test-timeouts-enabled YES \
+  -default-test-execution-time-allowance 120 \
+  -maximum-test-execution-time-allowance 300 \
+  "${signing[@]}" \
+  2>&1 | tee build/xcodebuild.log \
+  | grep --line-buffered -E '^(Test Case|Test Suite|\*\*)|error:|warning:|t = .*(Launch|Wait|Tap|Type|Find)'
+status="${PIPESTATUS[0]}"
+set -e -o pipefail
+
+# A test that failed and then passed: a warning on the run, so a flake
+# stays in view.
+retried=$(sed -nE "s/^Test Case '-\[[^ ]+ ([^]]+)\]' failed .*/\1/p" build/xcodebuild.log | sort -u)
+for t in $retried; do
+  if grep -qE "^Test Case '-\[[^ ]+ $t\]' passed" build/xcodebuild.log; then
+    echo "::warning title=UI test passed on retry::$t failed once and passed on its retry"
+  fi
+done
+
+if [ "$status" -ne 0 ]; then
+  echo "error: xcodebuild exited $status. The last 80 lines of build/xcodebuild.log:" >&2
+  tail -80 build/xcodebuild.log >&2
+fi
+xcrun xccov view --report --only-targets build/AberaTech.xcresult 2>/dev/null || true
+exit "$status"

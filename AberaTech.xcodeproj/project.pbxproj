@@ -1,0 +1,502 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0AD651A8B762647C1F941612 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E671D65B109D265146D1546 /* Dependencies.swift */; };
+		14DD75EE02488D5FA71307A9 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6E8A70F340B4A2EB140C36 /* AppModel.swift */; };
+		15C4A9246A70AA2373074C2A /* AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3EC8428DF0CDB9E7925C4 /* AppUITests.swift */; };
+		22EF45C76EF089C330F1E784 /* RequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40CEA2D5B88BB720AD83679 /* RequestsView.swift */; };
+		3473D52A18514F2FB9E65FC8 /* HealthKitWeights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012D44C93095161449A15D40 /* HealthKitWeights.swift */; };
+		492CC01BA6E504AB3DED7554 /* FitnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16192BED548580CC1A72A080 /* FitnessView.swift */; };
+		5A8284CD6A8E6C0C004518BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 510E3D11835A8A98E67C300C /* Assets.xcassets */; };
+		80486EFD326AB1FC64EA36E8 /* AberaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 673B7F14CACF6C342EA108EB /* AberaCore */; };
+		9E58B031EB8E20F65BC7B6DD /* Demo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB46E3A79B73CA3AE7B25E6 /* Demo.swift */; };
+		AF5E71FE6C76E35415A28FAE /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7259CD1612CFDAB0CC1F2EF5 /* MeView.swift */; };
+		CC1B67F9F8BE50AC6D0B2878 /* WishListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DEEB7789C9C86FEEFC3631 /* WishListView.swift */; };
+		D5087FB8C39AAD78CC307B10 /* AberaTechApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881E1CE35933A587506C17A6 /* AberaTechApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F660A69A8F2CA3146B43EEAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78E32EA42734AFB63BA2DC58 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E67379428763ECF95793F6E6;
+			remoteInfo = AberaTech;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		012D44C93095161449A15D40 /* HealthKitWeights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitWeights.swift; sourceTree = "<group>"; };
+		16192BED548580CC1A72A080 /* FitnessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessView.swift; sourceTree = "<group>"; };
+		2B6E8A70F340B4A2EB140C36 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		510E3D11835A8A98E67C300C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		701D6EAE4FD8A1F65A9F5FE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7259CD1612CFDAB0CC1F2EF5 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+		881E1CE35933A587506C17A6 /* AberaTechApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AberaTechApp.swift; sourceTree = "<group>"; };
+		8E671D65B109D265146D1546 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		8EB46E3A79B73CA3AE7B25E6 /* Demo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Demo.swift; sourceTree = "<group>"; };
+		90EC4BA7945CFD82BF67A511 /* AberaTech.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AberaTech.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		979C5CF87A5B25250B1BE14F /* AberaTechUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AberaTechUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ABA6E2E1B5ADFB941683AEC8 /* AberaTech.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AberaTech.entitlements; sourceTree = "<group>"; };
+		AEF3EC8428DF0CDB9E7925C4 /* AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUITests.swift; sourceTree = "<group>"; };
+		AF641098879092E8BA827D98 /* AberaCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AberaCore; path = Packages/AberaCore; sourceTree = SOURCE_ROOT; };
+		B9DEEB7789C9C86FEEFC3631 /* WishListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListView.swift; sourceTree = "<group>"; };
+		C40CEA2D5B88BB720AD83679 /* RequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E2C71A378059AB2719ACCFD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80486EFD326AB1FC64EA36E8 /* AberaCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2EADB9D5085C15962000A61C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				90EC4BA7945CFD82BF67A511 /* AberaTech.app */,
+				979C5CF87A5B25250B1BE14F /* AberaTechUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3AF34D1D184E828DB54292DE = {
+			isa = PBXGroup;
+			children = (
+				F2022D61A65E5E99F92E77C1 /* App */,
+				9AFB2A8F48CABA2BEBCF4CD2 /* AppUITests */,
+				FE7262556746AFE162E240B6 /* Packages */,
+				2EADB9D5085C15962000A61C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9AFB2A8F48CABA2BEBCF4CD2 /* AppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				AEF3EC8428DF0CDB9E7925C4 /* AppUITests.swift */,
+			);
+			path = AppUITests;
+			sourceTree = "<group>";
+		};
+		F2022D61A65E5E99F92E77C1 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				ABA6E2E1B5ADFB941683AEC8 /* AberaTech.entitlements */,
+				881E1CE35933A587506C17A6 /* AberaTechApp.swift */,
+				2B6E8A70F340B4A2EB140C36 /* AppModel.swift */,
+				510E3D11835A8A98E67C300C /* Assets.xcassets */,
+				8EB46E3A79B73CA3AE7B25E6 /* Demo.swift */,
+				8E671D65B109D265146D1546 /* Dependencies.swift */,
+				16192BED548580CC1A72A080 /* FitnessView.swift */,
+				012D44C93095161449A15D40 /* HealthKitWeights.swift */,
+				701D6EAE4FD8A1F65A9F5FE9 /* Info.plist */,
+				7259CD1612CFDAB0CC1F2EF5 /* MeView.swift */,
+				C40CEA2D5B88BB720AD83679 /* RequestsView.swift */,
+				B9DEEB7789C9C86FEEFC3631 /* WishListView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		FE7262556746AFE162E240B6 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				AF641098879092E8BA827D98 /* AberaCore */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3C67F2B7E35FD5CE00D816F5 /* AberaTechUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF650711716FB397ACCA1EDF /* Build configuration list for PBXNativeTarget "AberaTechUITests" */;
+			buildPhases = (
+				8FE931D53678057FF1955317 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				64B639CC2A923007BE6CDE21 /* PBXTargetDependency */,
+			);
+			name = AberaTechUITests;
+			packageProductDependencies = (
+			);
+			productName = AberaTechUITests;
+			productReference = 979C5CF87A5B25250B1BE14F /* AberaTechUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		E67379428763ECF95793F6E6 /* AberaTech */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B3431AC3830E876D775D6DB /* Build configuration list for PBXNativeTarget "AberaTech" */;
+			buildPhases = (
+				52CDFDBF3260E550AA8DF581 /* Sources */,
+				D75FB3E39825522517FF4C0E /* Resources */,
+				E2C71A378059AB2719ACCFD0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AberaTech;
+			packageProductDependencies = (
+				673B7F14CACF6C342EA108EB /* AberaCore */,
+			);
+			productName = AberaTech;
+			productReference = 90EC4BA7945CFD82BF67A511 /* AberaTech.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		78E32EA42734AFB63BA2DC58 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					3C67F2B7E35FD5CE00D816F5 = {
+						ProvisioningStyle = Automatic;
+						TestTargetID = E67379428763ECF95793F6E6;
+					};
+					E67379428763ECF95793F6E6 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 172516B01827FC91A130C61E /* Build configuration list for PBXProject "AberaTech" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3AF34D1D184E828DB54292DE;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				DE91210933D9AD9DDAA6B7EA /* XCLocalSwiftPackageReference "Packages/AberaCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2EADB9D5085C15962000A61C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E67379428763ECF95793F6E6 /* AberaTech */,
+				3C67F2B7E35FD5CE00D816F5 /* AberaTechUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D75FB3E39825522517FF4C0E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A8284CD6A8E6C0C004518BB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		52CDFDBF3260E550AA8DF581 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5087FB8C39AAD78CC307B10 /* AberaTechApp.swift in Sources */,
+				14DD75EE02488D5FA71307A9 /* AppModel.swift in Sources */,
+				9E58B031EB8E20F65BC7B6DD /* Demo.swift in Sources */,
+				0AD651A8B762647C1F941612 /* Dependencies.swift in Sources */,
+				492CC01BA6E504AB3DED7554 /* FitnessView.swift in Sources */,
+				3473D52A18514F2FB9E65FC8 /* HealthKitWeights.swift in Sources */,
+				AF5E71FE6C76E35415A28FAE /* MeView.swift in Sources */,
+				22EF45C76EF089C330F1E784 /* RequestsView.swift in Sources */,
+				CC1B67F9F8BE50AC6D0B2878 /* WishListView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FE931D53678057FF1955317 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				15C4A9246A70AA2373074C2A /* AppUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		64B639CC2A923007BE6CDE21 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E67379428763ECF95793F6E6 /* AberaTech */;
+			targetProxy = F660A69A8F2CA3146B43EEAC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2DBEB7F74CE6D3CE65CBDD0B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = App/AberaTech.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.abera.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		3AEA78DC522C496C9B523DC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 0.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		43A64E8DC6A0B57AD230370E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.abera.app.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AberaTech;
+			};
+			name = Release;
+		};
+		868E2536494A2483AE9D6499 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 0.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		E4125942715F5E38356FBA9B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = App/AberaTech.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.abera.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E95F5B4F3C9FA650719647F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.abera.app.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AberaTech;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		172516B01827FC91A130C61E /* Build configuration list for PBXProject "AberaTech" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				868E2536494A2483AE9D6499 /* Debug */,
+				3AEA78DC522C496C9B523DC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7B3431AC3830E876D775D6DB /* Build configuration list for PBXNativeTarget "AberaTech" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4125942715F5E38356FBA9B /* Debug */,
+				2DBEB7F74CE6D3CE65CBDD0B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FF650711716FB397ACCA1EDF /* Build configuration list for PBXNativeTarget "AberaTechUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E95F5B4F3C9FA650719647F8 /* Debug */,
+				43A64E8DC6A0B57AD230370E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		DE91210933D9AD9DDAA6B7EA /* XCLocalSwiftPackageReference "Packages/AberaCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/AberaCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		673B7F14CACF6C342EA108EB /* AberaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AberaCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 78E32EA42734AFB63BA2DC58 /* Project object */;
+}

@@ -1,0 +1,85 @@
+# The Xcode project is generated from this file by XcodeGen
+# (tools/xcodegen.env pins the version). CI regenerates it and fails when
+# the committed AberaTech.xcodeproj differs: run scripts/xcodegen.sh
+# after editing this file.
+name: AberaTech
+options:
+  bundleIdPrefix: tech.abera
+  deploymentTarget:
+    iOS: "26.1"
+  createIntermediateGroups: true
+  developmentLanguage: en
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+    GCC_TREAT_WARNINGS_AS_ERRORS: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    MARKETING_VERSION: "0.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+packages:
+  AberaCore:
+    path: Packages/AberaCore
+targets:
+  AberaTech:
+    type: application
+    platform: iOS
+    sources:
+      - App
+    dependencies:
+      - package: AberaCore
+    entitlements:
+      path: App/AberaTech.entitlements
+      properties:
+        # Weigh-ins from Apple Health for abera.tech/fitness, with the app
+        # woken for each new one.
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.background-delivery: true
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: aberaTech
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        NSHealthShareUsageDescription: Sends your weigh-ins to abera.tech/fitness, where your goals are forecast.
+        NSHealthUpdateUsageDescription: Only the demo build writes a weigh-in, to test sending them.
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: tech.abera.app
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1"
+        ENABLE_PREVIEWS: YES
+  AberaTechUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - AppUITests
+    dependencies:
+      - target: AberaTech
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: tech.abera.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  AberaTech:
+    build:
+      targets:
+        AberaTech: all
+        AberaTechUITests: [test]
+    test:
+      targets:
+        - AberaTechUITests
+      gatherCoverageData: true
+      coverageTargets:
+        - AberaTech

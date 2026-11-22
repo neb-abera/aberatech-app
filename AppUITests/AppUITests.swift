@@ -1,0 +1,223 @@
+import XCTest
+
+/// Every screen and button, driven through the app with abera.tech in
+/// memory (`-demo`, App/Demo.swift), and Apple Health through the
+/// simulator's real HealthKit.
+@MainActor
+final class AppUITests: XCTestCase {
+    /// Runs first, by name, and only launches: the first launch under
+    /// XCUITest on a fresh simulator can take a minute.
+    func test0WarmUp() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-demo"]
+        app.launch()
+        _ = app.tabBars.buttons["Requests"].waitForExistence(timeout: 120)
+    }
+
+    private func launch(_ arguments: String...) -> XCUIApplication {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["-demo"] + arguments
+        app.launch()
+        return app
+    }
+
+    private func open(_ tab: String, in app: XCUIApplication) {
+        let button = app.tabBars.buttons[tab]
+        XCTAssertTrue(button.waitForExistence(timeout: 15), app.debugDescription)
+        button.tap()
+    }
+
+    private func poll(_ timeout: TimeInterval, _ holds: () -> Bool) -> Bool {
+        let end = Date().addingTimeInterval(timeout)
+        while Date() < end {
+            if holds() { return true }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        }
+        return holds()
+    }
+
+    private func request(_ app: XCUIApplication, _ title: String) -> XCUIElement {
+        app.buttons["request-\(title)"].firstMatch
+    }
+
+    // MARK: Sign-in
+
+    func testSigningInOpensHerRequests() {
+        let app = launch("-demo-signed-out")
+        let signIn = app.buttons["sign-in"]
+        XCTAssertTrue(signIn.waitForExistence(timeout: 15))
+        signIn.tap()
+        XCTAssertTrue(
+            request(app, "Rake the leaves to the tree box").waitForExistence(timeout: 15), app.debugDescription)
+    }
+
+    func testSigningOutReturnsToSignIn() {
+        let app = launch()
+        open("Me", in: app)
+        let who = app.descendants(matching: .any)["signed-in-as"].firstMatch
+        XCTAssertTrue(who.waitForExistence(timeout: 5), app.debugDescription)
+        XCTAssertTrue(who.label.contains("Heb") || (who.value as? String) == "Heb", who.debugDescription)
+        app.buttons["sign-out"].tap()
+        XCTAssertTrue(app.buttons["sign-in"].waitForExistence(timeout: 10))
+    }
+
+    // MARK: Requests
+
+    func testHerRequestsShowTheirStatus() {
+        let app = launch()
+        let rake = request(app, "Rake the leaves to the tree box")
+        XCTAssertTrue(rake.waitForExistence(timeout: 15))
+        XCTAssertTrue(rake.label.contains("Received"), rake.label)
+        XCTAssertTrue(request(app, "Fix the bathroom faucet").label.contains("In progress"))
+        XCTAssertTrue(request(app, "Book the flight to Kansas City").label.contains("Done"))
+        let fence = request(app, "Paint the fence")
+        XCTAssertTrue(fence.label.contains("Not doing") && fence.label.contains("Hiring it out"), fence.label)
+    }
+
+    func testAddingARequestPutsItOnTheList() {
+        let app = launch()
+        let add = app.buttons["add-request"]
+        XCTAssertTrue(add.waitForExistence(timeout: 15))
+        add.tap()
+        let title = app.textFields["request-title"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+        title.tap()
+        title.typeText("Buy leaf bags")
+        app.buttons["save-request"].tap()
+        let added = request(app, "Buy leaf bags")
+        XCTAssertTrue(added.waitForExistence(timeout: 10), app.debugDescription)
+        XCTAssertTrue(added.label.contains("Received"), added.label)
+    }
+
+    func testARequestWithNoTitleSaysWhy() {
+        let app = launch()
+        XCTAssertTrue(app.buttons["add-request"].waitForExistence(timeout: 15))
+        app.buttons["add-request"].tap()
+        XCTAssertTrue(app.buttons["save-request"].waitForExistence(timeout: 5))
+        app.buttons["save-request"].tap()
+        XCTAssertTrue(app.staticTexts["Add a title."].waitForExistence(timeout: 5), app.debugDescription)
+    }
+
+    func testEditingARequestChangesItsTitle() {
+        let app = launch()
+        let faucet = request(app, "Fix the bathroom faucet")
+        XCTAssertTrue(faucet.waitForExistence(timeout: 15))
+        faucet.tap()
+        let title = app.textFields["request-title"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+        title.tap()
+        title.typeText(" and the shower")
+        app.buttons["save-request"].tap()
+        XCTAssertTrue(
+            request(app, "Fix the bathroom faucet and the shower").waitForExistence(timeout: 10), app.debugDescription)
+    }
+
+    func testRemovingARequestTakesItOffTheListInOneTap() {
+        let app = launch()
+        let faucet = request(app, "Fix the bathroom faucet")
+        XCTAssertTrue(faucet.waitForExistence(timeout: 15))
+        faucet.tap()
+        let remove = app.buttons["remove-request"]
+        XCTAssertTrue(remove.waitForExistence(timeout: 5))
+        remove.tap()
+        XCTAssertTrue(poll(10) { !faucet.exists }, app.debugDescription)
+    }
+
+    func testAFinishedRequestCannotBeEdited() {
+        let app = launch()
+        let flight = request(app, "Book the flight to Kansas City")
+        XCTAssertTrue(flight.waitForExistence(timeout: 15))
+        flight.tap()
+        XCTAssertTrue(app.buttons["Close"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["save-request"].exists)
+        XCTAssertFalse(app.buttons["remove-request"].exists)
+    }
+
+    // MARK: Fitness and wish list
+
+    func testFitnessShowsEachGoalWithItsForecastAndTheWeight() {
+        let app = launch()
+        open("Fitness", in: app)
+        let bench = app.descendants(matching: .any)["goal-Bench Press"].firstMatch
+        XCTAssertTrue(bench.waitForExistence(timeout: 10), app.debugDescription)
+        XCTAssertTrue(bench.label.contains("Now 207 lb, goal 248 lb"), bench.label)
+        XCTAssertTrue(bench.label.contains("Forecast 227 lb"), bench.label)
+        XCTAssertTrue(bench.label.contains("2% chance"), bench.label)
+        let weight = app.descendants(matching: .any)["latest-weight"].firstMatch
+        XCTAssertTrue(weight.exists)
+        XCTAssertTrue(weight.label.contains("170.0 lb"), weight.label)
+    }
+
+    func testTheWishListShowsWhatIsWanted() {
+        let app = launch()
+        open("Wish list", in: app)
+        let shoes = app.descendants(matching: .any)["wish-Running shoes"].firstMatch
+        XCTAssertTrue(shoes.waitForExistence(timeout: 10), app.debugDescription)
+        XCTAssertTrue(app.staticTexts["Nike Pegasus 42"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["wish-AI camera"].exists)
+    }
+
+    // MARK: Apple Health
+
+    func testAHouseholdPhoneHasNoAppleHealthSection() {
+        let app = launch()
+        open("Me", in: app)
+        XCTAssertTrue(app.buttons["sign-out"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["send-weights"].exists)
+    }
+
+    /// The Health sheet iOS shows the first time: turn every category on,
+    /// then Allow. Its labels have moved between iOS releases, so any
+    /// element whose label starts "Turn On All" counts, in the app or in
+    /// Springboard. False when no sheet came within the timeout.
+    private func allowHealth(_ app: XCUIApplication, timeout: TimeInterval) -> Bool {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let label = NSPredicate(format: "label BEGINSWITH[c] 'Turn On All'")
+        let inApp = app.descendants(matching: .any).matching(label).firstMatch
+        let inSpringboard = springboard.descendants(matching: .any).matching(label).firstMatch
+        guard poll(timeout, { inApp.exists || inSpringboard.exists }) else { return false }
+        let host = inApp.exists ? app : springboard
+        (inApp.exists ? inApp : inSpringboard).tap()
+        let allow = host.buttons["Allow"].firstMatch
+        XCTAssertTrue(allow.waitForExistence(timeout: 5), host.debugDescription)
+        allow.tap()
+        return true
+    }
+
+    /// A weigh-in in Apple Health reaches abera.tech through the simulator's
+    /// real HealthKit and the Health sheet a person sees. On 2026-11-21
+    /// Neb's Lose It weigh-ins reached Apple Health and never abera.tech.
+    func testAnAppleHealthWeighInIsSentToAberaTech() throws {
+        let app = launch("-demo-owner", "-demo-health")
+        // The launch refresh asks first. When that sheet does not come,
+        // Send weigh-ins now asks again from the open screen.
+        var allowed = allowHealth(app, timeout: 8)
+
+        open("Me", in: app)
+        let send = app.buttons["send-weights"]
+        XCTAssertTrue(send.waitForExistence(timeout: 5))
+        send.tap()
+        if !allowed { allowed = allowHealth(app, timeout: 20) }
+        if !allowed {
+            // The iOS 27 simulator showed no Health sheet at all on
+            // 2026-11-21, in the app or in Springboard. The 26.5 one did.
+            let ios = ProcessInfo.processInfo.operatingSystemVersion.majorVersion
+            if ios >= 27 { throw XCTSkip("The iOS \(ios) simulator showed no Health sheet") }
+            let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+            XCTFail("no Health sheet:\n\(app.debugDescription)\nSpringboard:\n\(springboard.debugDescription)")
+            return
+        }
+
+        let status = app.staticTexts["weight-status"]
+        XCTAssertTrue(status.waitForExistence(timeout: 10), app.debugDescription)
+        // The launch refresh may have sent it already: then this tap finds abera.tech up to date.
+        XCTAssertTrue(
+            poll(10) {
+                status.label.hasPrefix("Sent to abera.tech: 1 new") || status.label == "Up to date with abera.tech."
+            }, status.label)
+
+        send.tap()
+        XCTAssertTrue(poll(10) { status.label == "Up to date with abera.tech." }, status.label)
+    }
+}
