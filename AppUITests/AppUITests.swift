@@ -169,12 +169,15 @@ final class AppUITests: XCTestCase {
     }
 
     /// The Health sheet iOS shows the first time: turn every category on,
-    /// then Allow. Its labels have moved between iOS releases, so any
-    /// element whose label starts "Turn On All" counts, in the app or in
+    /// then Allow. Its labels have moved between iOS releases: "Turn On
+    /// All" on iOS 26, "Select All 2 Topics" on iOS 27 (2026-11-22). Its
+    /// cell identifier, or either label, counts, in the app or in
     /// Springboard. False when no sheet came within the timeout.
     private func allowHealth(_ app: XCUIApplication, timeout: TimeInterval) -> Bool {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let label = NSPredicate(format: "label BEGINSWITH[c] 'Turn On All'")
+        let label = NSPredicate(
+            format: "identifier == 'UIA.Health.AuthSheet.AllCategoryButton' "
+                + "OR label BEGINSWITH[c] 'Turn On All' OR label BEGINSWITH[c] 'Select All'")
         let inApp = app.descendants(matching: .any).matching(label).firstMatch
         let inSpringboard = springboard.descendants(matching: .any).matching(label).firstMatch
         guard poll(timeout, { inApp.exists || inSpringboard.exists }) else { return false }
@@ -204,10 +207,6 @@ final class AppUITests: XCTestCase {
         send.tap()
         if !allowed { allowed = allowHealth(app, timeout: 20) }
         if !allowed {
-            // The iOS 27 simulator showed no Health sheet at all on
-            // 2026-11-21, in the app or in Springboard. The 26.5 one did.
-            let ios = ProcessInfo.processInfo.operatingSystemVersion.majorVersion
-            if ios >= 27 { throw XCTSkip("The iOS \(ios) simulator showed no Health sheet") }
             let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
             XCTFail("no Health sheet:\n\(app.debugDescription)\nSpringboard:\n\(springboard.debugDescription)")
             return
