@@ -183,24 +183,15 @@ final class AppUITests: XCTestCase {
         guard poll(timeout, { inApp.exists || inSpringboard.exists }) else { return false }
         let host = inApp.exists ? app : springboard
         (inApp.exists ? inApp : inSpringboard).tap()
-        let allow = host.buttons["Allow"].firstMatch
-        if allow.waitForExistence(timeout: 5) {
-            allow.tap()
-            return true
-        }
-        // On iOS 27 (2026-11-22) the CI screen recording shows no Allow in
-        // the sheet's bar, and its element sits outside the visible frame.
-        // Scroll the sheet until it can be tapped.
-        let anyAllow = host.descendants(matching: .any).matching(NSPredicate(format: "label == 'Allow'")).firstMatch
-        for _ in 0..<4 where !(allow.exists && allow.isHittable) && !(anyAllow.exists && anyAllow.isHittable) {
-            host.swipeUp()
-        }
-        if allow.exists && allow.isHittable {
-            allow.tap()
-        } else {
-            XCTAssertTrue(anyAllow.isHittable, host.debugDescription)
-            anyAllow.tap()
-        }
+        // iOS 26 labels the confirm button Allow. iOS 27 (2026-11-22) labels
+        // it Continue, gives it the identifier UIA.Health.Allow.Button, and
+        // puts it below the fold, so the sheet is scrolled until it shows.
+        let allow = host.buttons.matching(
+            NSPredicate(format: "identifier == 'UIA.Health.Allow.Button' OR label == 'Allow'")
+        ).firstMatch
+        for _ in 0..<4 where !(allow.exists && allow.isHittable) { host.swipeUp() }
+        XCTAssertTrue(allow.isHittable, host.debugDescription)
+        allow.tap()
         return true
     }
 
