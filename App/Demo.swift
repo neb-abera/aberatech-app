@@ -84,9 +84,11 @@
         init(health: HealthKitWeights) { self.health = health }
 
         func samples(since: Date) async throws -> [WeightSample] {
-            if !seeded {
+            // Marked done only once the write succeeds. On iOS 27
+            // (2026-11-22) the launch observer read first, before Health
+            // access was allowed, and the refused write was never retried.
+            if !seeded, (try? await health.add(kilograms: 77.111)) != nil {
                 seeded = true
-                try? await health.add(kilograms: 77.111)
             }
             return try await health.samples(since: since)
         }
