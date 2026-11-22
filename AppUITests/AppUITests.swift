@@ -198,6 +198,18 @@ final class AppUITests: XCTestCase {
         for _ in 0..<4 where !(allow.exists && allow.isHittable) { host.swipeUp() }
         XCTAssertTrue(allow.isHittable, host.debugDescription)
         allow.tap()
+        // iOS 27 then asks how much history to share, and its Allow stays
+        // off until one is picked. The app sends the last 30 days, so the
+        // test picks that. iOS 26 has no such page.
+        let history = host.descendants(matching: .any)
+            .matching(NSPredicate(format: "label BEGINSWITH 'Past 30 Days'")).firstMatch
+        if history.waitForExistence(timeout: 5) {
+            history.tap()
+            let confirm = host.buttons["Allow"].firstMatch
+            XCTAssertTrue(poll(5) { confirm.exists && confirm.isEnabled }, host.debugDescription)
+            confirm.tap()
+            XCTAssertTrue(poll(10) { !history.exists }, host.debugDescription)
+        }
         let sheet = host.descendants(matching: .any).matching(label).firstMatch
         XCTAssertTrue(poll(10) { !sheet.exists }, host.debugDescription)
         return true
