@@ -104,6 +104,18 @@ struct WeightSyncTests {
         #expect(await denied.server.calls.isEmpty)
     }
 
+    @Test func a_read_apple_health_refuses_says_why_and_the_next_run_sends() async {
+        let rig = await Self.rig([WeightSample(date: Self.at(day: 21, hour: 7), kilograms: 77.111)])
+        await rig.health.fail("Protected health data is inaccessible")
+        let refused = await rig.sync.run()
+        #expect(refused == .unreadable("Protected health data is inaccessible"))
+        #expect(refused.message == "Apple Health could not be read: Protected health data is inaccessible")
+        #expect(await rig.server.calls.isEmpty)
+
+        await rig.health.fail(nil)
+        #expect(await rig.sync.run() == .sent(WeightUploadResult(saved: 1, unchanged: 0)))
+    }
+
     @Test func a_failed_upload_is_tried_again_on_the_next_run() async {
         let rig = await Self.rig([WeightSample(date: Self.at(day: 21, hour: 7), kilograms: 77.111)])
         await rig.server.setOffline(true)

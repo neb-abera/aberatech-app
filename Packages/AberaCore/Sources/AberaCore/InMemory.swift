@@ -27,15 +27,24 @@ public actor MemoryDocuments: DocumentStore {
 public actor MemoryWeights: WeightReading {
     public var stored: [WeightSample]
     public var denied = false
+    /// A read that throws, as Apple Health does while the phone is locked.
+    public var failure: String?
 
     public init(_ stored: [WeightSample] = []) { self.stored = stored }
 
     public func add(_ sample: WeightSample) { stored.append(sample) }
     public func deny() { denied = true }
+    public func fail(_ reason: String?) { failure = reason }
 
     public func samples(since: Date) async throws -> [WeightSample] {
+        if let failure { throw ReadFailure(reason: failure) }
         // Apple Health answers a denied read with nothing, not an error.
-        denied ? [] : stored.filter { $0.date >= since }
+        return denied ? [] : stored.filter { $0.date >= since }
+    }
+
+    struct ReadFailure: Error, CustomStringConvertible {
+        let reason: String
+        var description: String { reason }
     }
 }
 

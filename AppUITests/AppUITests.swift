@@ -238,7 +238,7 @@ final class AppUITests: XCTestCase {
         XCTAssertTrue(
             poll(10) {
                 status.label.hasPrefix("Sent to abera.tech: 1 new") || status.label == "Up to date with abera.tech."
-            }, status.label)
+            }, "\(status.label)\n\(app.debugDescription)")
 
         send.tap()
         XCTAssertTrue(poll(10) { status.label == "Up to date with abera.tech." }, status.label)

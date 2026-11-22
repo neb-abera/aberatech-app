@@ -78,6 +78,8 @@ public actor WeightSync {
         /// Apple Health gave nothing: no weigh-ins, or no permission. iOS
         /// does not tell an app which.
         case nothingToSend
+        /// Apple Health refused the read and said why.
+        case unreadable(String)
         /// The same days and weights as the last run.
         case alreadySent
         case sent(WeightUploadResult)
@@ -90,6 +92,7 @@ public actor WeightSync {
             case .notOwner: "Weigh-ins go up from Neb's phone."
             case .nothingToSend:
                 "No weigh-ins in Apple Health in the last 30 days. If Lose It holds some, allow Health access: Settings > Privacy & Security > Health > aberaTech."
+            case .unreadable(let reason): "Apple Health could not be read: \(reason)"
             case .alreadySent: "Up to date with abera.tech."
             case .sent(let result): "Sent to abera.tech: \(result.saved) new, \(result.unchanged) already there."
             case .failed(let error): error.message
@@ -102,7 +105,12 @@ public actor WeightSync {
         guard let session = try? await credentials.load() else { return .notSignedIn }
         guard session.role == .owner else { return .notOwner }
         let since = calendar.date(byAdding: .day, value: -Self.days, to: calendar.startOfDay(for: now())) ?? now()
-        guard let samples = try? await reader.samples(since: since) else { return .nothingToSend }
+        let samples: [WeightSample]
+        do {
+            samples = try await reader.samples(since: since)
+        } catch {
+            return .unreadable(String(describing: error))
+        }
         let weights = Self.daily(samples, calendar: calendar)
         guard !weights.isEmpty else { return .nothingToSend }
 

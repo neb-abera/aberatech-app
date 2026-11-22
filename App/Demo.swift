@@ -87,10 +87,20 @@
             // Marked done only once the write succeeds. On iOS 27
             // (2026-11-22) the launch observer read first, before Health
             // access was allowed, and the refused write was never retried.
-            if !seeded, (try? await health.add(kilograms: 77.111)) != nil {
-                seeded = true
+            if !seeded {
+                do {
+                    try await health.add(kilograms: 77.111)
+                    seeded = true
+                } catch {
+                    throw SeedFailure(reason: "the demo weigh-in was not written: \(error.localizedDescription)")
+                }
             }
             return try await health.samples(since: since)
         }
+    }
+
+    struct SeedFailure: Error, CustomStringConvertible {
+        let reason: String
+        var description: String { reason }
     }
 #endif
